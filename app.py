@@ -5,7 +5,7 @@ import pandas as pd
 app = Flask(__name__)
 
 # Load your trained model (make sure to save it as .pkl in the repo first)
-model = joblib.load("model.pkl")
+model = joblib.load("taxi_demand_model.pkl.gz")
 
 @app.route("/predict", methods=["POST"])
 def predict():
