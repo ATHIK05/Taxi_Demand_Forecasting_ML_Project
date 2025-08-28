@@ -3,7 +3,7 @@ flask==3.0.3
 gunicorn==23.0.0
 
 # Data processing
-pandas==2.2.2
+pandas
 numpy==1.26.4
 
 # Machine Learning
