@@ -4,34 +4,24 @@ import pandas as pd
 
 app = Flask(__name__)
 
-# Load trained model
-model = joblib.load("taxi_demand_model.pkl.gz")
+try:
+    print("🔄 Loading model...")
+    model = joblib.load("taxi_demand_model.pkl.gz")
+    print("✅ Model loaded successfully")
+except Exception as e:
+    print(f"❌ Failed to load model: {e}")
+    model = None
 
-# Root route for testing in browser
 @app.route("/")
 def home():
     return "🚖 Taxi Demand Forecasting API is running!"
 
-# Prediction route
 @app.route("/predict", methods=["POST"])
 def predict():
-    try:
-        data = request.json  # expects {"features": [values]}
-        
-        if not data or "features" not in data:
-            return jsonify({"error": "Invalid input. Provide JSON with 'features'"}), 400
+    if model is None:
+        return jsonify({"error": "Model not loaded"}), 500
 
-        # Convert input into DataFrame
-        df = pd.DataFrame([data["features"]])
-
-        # Predict
-        prediction = model.predict(df)[0]
-
-        return jsonify({"prediction": float(prediction)})
-    
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-# Only needed for local testing; Render uses gunicorn
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    data = request.json
+    df = pd.DataFrame([data["features"]])
+    prediction = model.predict(df)[0]
+    return jsonify({"prediction": float(prediction)})
