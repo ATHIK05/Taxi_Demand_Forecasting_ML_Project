@@ -1,10 +1,17 @@
-flask
-pandas
-numpy
-scikit-learn==1.6.1
-xgboost
-lightgbm
-matplotlib
-seaborn
-joblib
-gunicorn
+# Web framework
+flask==3.0.3
+gunicorn==23.0.0
+
+# Data processing
+pandas==2.2.2
+numpy==1.26.4
+
+# Machine Learning
+scikit-learn==1.6.1   # Must match training version
+joblib==1.4.2
+xgboost==2.1.1
+lightgbm==4.3.0
+
+# Visualization (optional, only if you use them in code)
+matplotlib==3.9.1
+seaborn==0.13.2
