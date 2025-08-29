@@ -4,15 +4,24 @@ import pandas as pd
 
 app = Flask(__name__)
 
-# Load your trained model (make sure to save it as .pkl in the repo first)
-model = joblib.load("model.pkl")
+try:
+    print("🔄 Loading model...")
+    model = joblib.load("taxi_demand_model.pkl")
+    print("✅ Model loaded successfully")
+except Exception as e:
+    print(f"❌ Failed to load model: {e}")
+    model = None
+
+@app.route("/")
+def home():
+    return "🚖 Taxi Demand Forecasting API is running!"
 
 @app.route("/predict", methods=["POST"])
 def predict():
-    data = request.json  # expects {"features": [values]}
+    if model is None:
+        return jsonify({"error": "Model not loaded"}), 500
+
+    data = request.json
     df = pd.DataFrame([data["features"]])
     prediction = model.predict(df)[0]
-    return jsonify({"prediction": str(prediction)})
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    return jsonify({"prediction": float(prediction)})
