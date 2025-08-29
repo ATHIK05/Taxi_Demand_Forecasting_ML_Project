@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 try:
     print("🔄 Loading model...")
-    model = joblib.load("taxi_demand_model.pkl.gz")
+    model = joblib.load("taxi_demand_model.pkl")
     print("✅ Model loaded successfully")
 except Exception as e:
     print(f"❌ Failed to load model: {e}")
